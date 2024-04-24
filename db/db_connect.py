@@ -1,10 +1,12 @@
 from sqlalchemy import URL, create_engine
-from src.db_tables import Base
+from db.db_tables import Base
 
+from sqlalchemy.orm import sessionmaker
+from db.db_tables import SynopticData, SynopticGeoInfo
 
 DATABASE_URL = URL.create(
     drivername="sqlite",
-    database="synoptic.db",
+    database="db/synoptic.db",
 )
 
 print(DATABASE_URL)
@@ -20,3 +22,4 @@ def create_db():
     Base.metadata.create_all(
         bind=engine
     )
+    

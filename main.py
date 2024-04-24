@@ -1,5 +1,5 @@
 # %% Create DataBase
-from src.db_connect import create_db
+from db.db_connect import create_db
 create_db()
 
 
