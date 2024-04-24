@@ -1,11 +1,13 @@
 from sqlalchemy import URL, create_engine
-from .db_tables import Base
+from src.db_tables import Base
 
 
 DATABASE_URL = URL.create(
     drivername="sqlite",
-    database="./db/synoptic.db",
+    database="synoptic.db",
 )
+
+print(DATABASE_URL)
 
 
 engine = create_engine(
