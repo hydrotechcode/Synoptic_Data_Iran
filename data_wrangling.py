@@ -37,3 +37,17 @@ df['station_name'] = df['station_name']\
 
 
 # %%
+st = df.drop_duplicates(
+    subset=["station_name", "station_id", "station_latitude", "station_longitude", "station_altitude"]
+).drop(columns=["date", "temperature_max", "temperature_min", "temperature_mean", "precipitation"])\
+    .reset_index(drop=True)
+
+
+# %%
+# ab = df[df["station_name"] == "ABBAR"]
+
+s_id = ab["station_id"].unique()
+
+ab.loc[ab["station_id"] == s_id[0], "station_id"] = s_id[1]
+
+# df.drop(ab.index, inplace=True)
