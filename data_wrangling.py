@@ -53,6 +53,7 @@ df.loc[df["station_altitude"].isna(), "station_altitude"] = -999
 
 # %% Data Cleansing: Extract Station Info
 gb = ["station_name", "station_id", "station_latitude", "station_longitude", "station_altitude"]
+
 station_info = df.groupby(by = gb)\
     .agg(
         date_min = ('date', 'min'),
@@ -105,11 +106,12 @@ data.to_pickle("data.pkl")
 # %% Data Cleansing: Load Pickle Data
 data = pd.read_pickle("data.pkl")
 
-
 # %% Data Cleansing: Select Stations
-day = 20 * 365
+day = 1
 
-station_info = data.groupby(by = ["station_name", "station_id", "station_latitude", "station_longitude", "station_altitude"])\
+gb = ["station_name", "station_id", "station_latitude", "station_longitude", "station_altitude"]
+
+station_info = data.groupby(by = gb)\
     .agg(
         date_min = ('date', 'min'),
         date_max = ('date', 'max'),
@@ -125,17 +127,35 @@ station_info = data.groupby(by = ["station_name", "station_id", "station_latitud
     .sort_values(by = ["station_name", "station_id"])\
     .reset_index()#.to_csv("station_info.csv", index = False)
 
-station_tmp = station_info[
-        (station_info["temperature_max_count"] >= day) &
-        (station_info["temperature_min_count"] >= day) &
-        (station_info["temperature_mean_count"] >= day) &
-        (station_info["precipitation_count"] >= day)
-    ].reset_index(drop = True)
+station_info['number_days'] = (station_info['date_max'] - station_info['date_min']).dt.days + 1
 
-station_tmp.to_csv("stations_info.csv", index = False)
+station_info['temperature_max_percent'] = (station_info['temperature_max_count'] / station_info['number_days']) * 100
+
+station_info['temperature_min_percent'] = (station_info['temperature_min_count'] / station_info['number_days']) * 100
+
+station_info['temperature_mean_percent'] = (station_info['temperature_mean_count'] / station_info['number_days']) * 100
+
+station_info['precipitation_percent'] = (station_info['precipitation_count'] / station_info['number_days']) * 100
+
+station_info['average_percent'] = (station_info['temperature_max_percent'] + station_info['temperature_min_percent'] + station_info['temperature_mean_percent'] + station_info['precipitation_percent']) / 4
+
+station_info = station_info[station_info["average_percent"] > 1]
+station_info = station_info[station_info["number_days"] > 365]
+
+# station_tmp = station_info[
+#         (station_info["temperature_max_count"] >= day) &
+#         (station_info["temperature_min_count"] >= day) &
+#         (station_info["temperature_mean_count"] >= day) &
+#         (station_info["precipitation_count"] >= day)
+#     ].reset_index(drop = True)
+
+station_info.to_csv("stations_info.csv", index = False)
 
 # %% Data Cleansing: Save Data
-data.loc[data["station_name"].isin(list(station_tmp["station_name"])), :]\
+data.loc[data["station_name"].isin(list(station_info["station_name"])), :]\
     .sort_values(by=["station_name", "date"])\
     .reset_index(drop=True)\
     .to_csv("data.csv", index = False)
+
+# %% 
+a = station_info[station_info.duplicated(subset="station_name", keep=False)]

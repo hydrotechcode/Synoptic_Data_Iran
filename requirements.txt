@@ -1,5 +1,9 @@
 numpy==1.26.4
 pandas==2.2.2
-geopandas==0.14.3
+geopandas==0.14.4
+geodatasets==2023.12.0
 SQLAlchemy==2.0.29
-dataprep==0.4.4
+matplotlib==3.8.4
+plotly==5.22.0
+nbformat==5.10.4
+# dataprep==0.4.5
