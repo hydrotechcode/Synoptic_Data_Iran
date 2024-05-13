@@ -99,6 +99,9 @@ for _, st in station_info.iterrows():
     data = pd.concat([data, df_tmp])
 
 
+# %%
+station_info.to_csv("stations_info.csv", index = False)
+
 # %% Data Cleansing: Save data as pickle
 data.to_pickle("data.pkl")
 
