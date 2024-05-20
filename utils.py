@@ -1,5 +1,7 @@
 # %% Import Libraries ---------------------------------------------------------
 import re
+import requests
+import base64
 
 
 # %% Function Definitions -----------------------------------------------------
@@ -48,5 +50,26 @@ def add_remove_characters(text):
     text = text.replace('*', '')
 
     return text
+
+
+# Get Elevation
+def get_elevation(lat, lon):
+    url = f"https://api.open-elevation.com/api/v1/lookup?locations={lat},{lon}"
+    
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        elevation_data = response.json()
+        elevation = elevation_data['results'][0]['elevation']
+        return elevation
+    else:
+        return None
+
+
+# Generate Base64 ID
+def generate_base64_id(text):
+    btext = text.encode('utf-8')
+    btext64 = base64.b64encode(btext)
+    return base64.b64encode(btext64).decode("ascii")
 
 # %%

@@ -1,9 +1,9 @@
+pip>=24.0
 numpy==1.26.4
 pandas==2.2.2
 geopandas==0.14.4
-geodatasets==2023.12.0
-SQLAlchemy==2.0.29
-matplotlib==3.8.4
+SQLAlchemy==2.0.30
 plotly==5.22.0
-nbformat==5.10.4
-# dataprep==0.4.5
+dash==2.17.0
+requests==2.31.0
+matplotlib==3.9.0

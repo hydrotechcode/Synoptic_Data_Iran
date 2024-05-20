@@ -3,7 +3,7 @@ import pickle
 import zipfile
 import pandas as pd
 
-from utiles import add_remove_characters
+from utils import add_remove_characters
 
 
 # %% Constants ----------------------------------------------------------------
@@ -107,7 +107,10 @@ data.to_pickle("data.pkl")
 
 
 # %% Data Cleansing: Load Pickle Data
-data = pd.read_pickle("data.pkl")
+import pickle
+import pandas as pd
+data = pd.read_pickle("stations.pkl")
+data
 
 # %% Data Cleansing: Select Stations
 day = 1
