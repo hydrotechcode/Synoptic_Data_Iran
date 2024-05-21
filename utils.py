@@ -1,7 +1,7 @@
 # %% Import Libraries ---------------------------------------------------------
 import re
+import hashlib
 import requests
-import base64
 
 
 # %% Function Definitions -----------------------------------------------------
@@ -66,10 +66,10 @@ def get_elevation(lat, lon):
         return None
 
 
-# Generate Base64 ID
-def generate_base64_id(text):
-    btext = text.encode('utf-8')
-    btext64 = base64.b64encode(btext)
-    return base64.b64encode(btext64).decode("ascii")
+# Generate Unique Code
+def generate_unique_code(row):
+    unique_string = f"{row['name']}_{row['id']}_{
+        row['lat']}_{row['lon']}_{row['alt']}"
+    return hashlib.md5(unique_string.encode()).hexdigest()
 
 # %%
